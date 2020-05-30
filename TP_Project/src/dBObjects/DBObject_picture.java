@@ -44,9 +44,7 @@ public class DBObject_picture {
                 byte[] imgBytes = rs.getBytes(2);
                 pic = ImageIO.read(new ByteArrayInputStream(imgBytes));
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBObject_organs.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(DBObject_picture.class.getName()).log(Level.SEVERE, null, ex);
         }
         return pic;
