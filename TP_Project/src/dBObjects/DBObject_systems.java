@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 /**
- *
+ * объекты таблицы "системы"
  */
-public class DBObject_systems { //объекты таблицы "системы"
+public class DBObject_systems {
 
     private int s_id;
     private String title;
@@ -19,11 +19,9 @@ public class DBObject_systems { //объекты таблицы "системы"
     }
 
     public void getDBObject_systems(int id, Connection con) throws SQLException {
-        //DB_Connect dbcon = new DB_Connect();
         String query = "SELECT * from systems where S_ID = " + id;
         Statement stmt = null;//для выполнения простых запросов без параметров
         ResultSet rs = null;
-        //Connection con = dbcon.getConnection();
         stmt = con.createStatement();
 
         rs = stmt.executeQuery(query);//выполняет запрос
@@ -33,8 +31,6 @@ public class DBObject_systems { //объекты таблицы "системы"
             desc = rs.getString(3);
             pic_id = rs.getInt(4);
         }
-        //con.close();        
-                //System.out.println("Соединение закрыто systems");
     }
 
     public int getS_id() {
