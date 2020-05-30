@@ -17,7 +17,6 @@ import javax.imageio.ImageIO;
 public class DBObject_picture {
 
     private int pic_id;
-    private byte[] pic;
 
     public DBObject_picture() {
     }
@@ -56,14 +55,6 @@ public class DBObject_picture {
 
     public void setPic_id(int pic_id) {
         this.pic_id = pic_id;
-    }
-
-    public byte[] getPic() {
-        return pic;
-    }
-
-    public void setPic(byte[] pic) {
-        this.pic = pic;
     }
 
 }
