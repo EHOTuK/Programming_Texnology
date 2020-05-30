@@ -26,13 +26,14 @@ public class DBObject_picture {
      * Метод получения картинки из таблицы по ее id
      *
      * @param id - идентефикатор, получаемый из класса MainPanel по нажатию мыши
+     * @param con - открытое соединение с БД
      * @return картинку
      */
-    public BufferedImage getDBObject_picture(int id) {
+    public BufferedImage getDBObject_picture(int id, Connection con) {
         BufferedImage pic = null;
-        DB_Connect dbcon = new DB_Connect();
+        //DB_Connect dbcon = new DB_Connect();
         String pic_query = "SELECT * from picture where pic_id = ?";
-        Connection con = dbcon.getConnection();
+        //Connection con = dbcon.getConnection();
         ResultSet rs = null;
         try {
             con.setAutoCommit(false); // работа с BLOB в Postgres должна идти без autocommit
@@ -49,7 +50,14 @@ public class DBObject_picture {
             Logger.getLogger(DBObject_organs.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(DBObject_picture.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }  /*finally{
+            try {
+                con.close();
+                System.out.println("Соединение закрыто pictures");
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject_organs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }*/
         return pic;
     }
 

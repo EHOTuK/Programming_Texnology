@@ -26,13 +26,14 @@ public class DBObject_organs {
      * переменным, описанным в классе DBObject_organs(объекту)
      *
      * @param id - идентефикатор записи в таблице БД
+     * @param con -соединение с БД
      */
-    public void getDBObject_organs(int id) { //получает id в качестве параметра
-        DB_Connect dbcon = new DB_Connect(); //создаем объект класса соединения
+    public void getDBObject_organs(int id, Connection con) { //получает id в качестве параметра
+        //DB_Connect dbcon = new DB_Connect(); //создаем объект класса соединения
         String query = "SELECT * from organs where o_id = " + id; //запрос по идентефикатору
         Statement stmt = null; //для выполнения простых запросов без параметров
         ResultSet rs = null; //переменная для хранения результатов запроса
-        Connection con = dbcon.getConnection(); //получаем соединение с БД
+        //Connection con = dbcon.getConnection(); //получаем соединение с БД
         try {
             stmt = con.createStatement();
 
@@ -47,7 +48,14 @@ public class DBObject_organs {
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBObject_organs.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } /*finally{
+            try {
+                con.close();                
+                System.out.println("Соединение закрыто organs");
+            } catch (SQLException ex) {
+                Logger.getLogger(DBObject_organs.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }*/
     }
 
     public int getO_id() {

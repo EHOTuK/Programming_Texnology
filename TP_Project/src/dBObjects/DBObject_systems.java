@@ -1,5 +1,6 @@
 package dBObjects;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -17,12 +18,13 @@ public class DBObject_systems { //объекты таблицы "системы"
     public DBObject_systems() {
     }
 
-    public void getDBObject_systems(int id) throws SQLException {
-        DB_Connect dbcon = new DB_Connect();
+    public void getDBObject_systems(int id, Connection con) throws SQLException {
+        //DB_Connect dbcon = new DB_Connect();
         String query = "SELECT * from systems where S_ID = " + id;
         Statement stmt = null;//для выполнения простых запросов без параметров
         ResultSet rs = null;
-        stmt = dbcon.getConnection().createStatement();
+        //Connection con = dbcon.getConnection();
+        stmt = con.createStatement();
 
         rs = stmt.executeQuery(query);//выполняет запрос
         if (rs.next()) {
@@ -31,6 +33,8 @@ public class DBObject_systems { //объекты таблицы "системы"
             desc = rs.getString(3);
             pic_id = rs.getInt(4);
         }
+        //con.close();        
+                //System.out.println("Соединение закрыто systems");
     }
 
     public int getS_id() {

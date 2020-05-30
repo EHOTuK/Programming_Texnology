@@ -10,6 +10,10 @@ import javax.swing.JMenuItem;
 import dBObjects.DBObject_organs;
 import dBObjects.DBObject_picture;
 import dBObjects.DBObject_systems;
+import dBObjects.DB_Connect;
+import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,6 +27,8 @@ public class Interface extends javax.swing.JFrame {
     DBObject_systems dbSystems = new DBObject_systems();
     DBObject_picture dbPicture = new DBObject_picture();
     BufferedImage bimage = null;
+    DB_Connect dbcon = new DB_Connect();
+    Connection con = dbcon.getConnection();
 
     /**
      * Констуктор иницилизирует значениями элементы интерфейса, создает пункты
@@ -34,7 +40,7 @@ public class Interface extends javax.swing.JFrame {
         //-----заполнение интерфейса при старте программы
         panel = new MainPanel(this);
         jPanel1.add(panel); //добавляем основную картинку
-        bimage = dbPicture.getDBObject_picture(38); //получаем картинку из БД для JPanel2
+        bimage = dbPicture.getDBObject_picture(38, con); //получаем картинку из БД для JPanel2
         redrawMiniPanel();
         setPreferredSize(new Dimension(950, 1050));//устанавливаем размеры окна
         setResizable(false);//запрет на изменение размеров
@@ -59,7 +65,7 @@ public class Interface extends javax.swing.JFrame {
             flagSystems = "MUSCLES";
             redrawMainPanel();
             setBDObject(1);
-            bimage = dbPicture.getDBObject_picture(39);
+            bimage = dbPicture.getDBObject_picture(39, con);
             redrawMiniPanel();
             jTextArea2.setText("Здесь будет описание мышцы, которую Вы выберете");
         });
@@ -71,7 +77,7 @@ public class Interface extends javax.swing.JFrame {
             flagSystems = "BONES";
             redrawMainPanel();
             setBDObject(3);
-            bimage = dbPicture.getDBObject_picture(40);
+            bimage = dbPicture.getDBObject_picture(40, con);
             redrawMiniPanel();
             jTextArea2.setText("Здесь будет описание кости, которую Вы выберете");
         });
@@ -83,7 +89,7 @@ public class Interface extends javax.swing.JFrame {
             flagSystems = "ORGANS";
             redrawMainPanel();
             setBDObject(2);
-            bimage = dbPicture.getDBObject_picture(41);
+            bimage = dbPicture.getDBObject_picture(41, con);
             redrawMiniPanel();
             jTextArea2.setText("Здесь будет органа мышцы, который Вы выберете");
         });
@@ -126,7 +132,7 @@ public class Interface extends javax.swing.JFrame {
             jTextArea2.setWrapStyleWord(true);
             jTextArea3.setLineWrap(true);
             jTextArea3.setWrapStyleWord(true);
-            dbSystems.getDBObject_systems(id);
+            dbSystems.getDBObject_systems(id, con);
             jLabel1.setText(dbSystems.getTitle());
             jLabel2.setText("");
             if (flagSystems == null) {
@@ -145,8 +151,8 @@ public class Interface extends javax.swing.JFrame {
      * @param id - номер поля в БД organs
      */
     public void setBDObjectOrgans(int id) {
-        dbOrgans.getDBObject_organs(id);
-        bimage = dbPicture.getDBObject_picture(id);
+        dbOrgans.getDBObject_organs(id, con);
+        bimage = dbPicture.getDBObject_picture(id, con);
         jLabel2.setText(dbOrgans.getTitle());
         jTextArea2.setLineWrap(true);
         jTextArea2.setWrapStyleWord(true);
@@ -196,6 +202,11 @@ public class Interface extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(950, 1050));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel1.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
@@ -282,14 +293,28 @@ public class Interface extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+//кнопка выхода. Также закрываем соединение с БД
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.exit(0);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jPanel1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MousePressed
         // TODO add your handling code here:
     }//GEN-LAST:event_jPanel1MousePressed
+//при нажатии на крестик закрываем соединение с БД
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        try {
+            con.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.exit(0);
+    }//GEN-LAST:event_formWindowClosing
 
     /**
      * @param args the command line arguments
